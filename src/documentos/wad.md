@@ -8,4 +8,10 @@ Este documento detalha os aspectos funcionais e técnicos do sistema, abrangendo
 
 A imagem a seguir ilustra o modelo relacional utilizado pelo sistema **AcadEvent**, representando a estrutura das tabelas, seus relacionamentos e os principais campos do banco de dados. Esse diagrama é essencial para compreender a organização lógica dos dados e como as entidades se conectam no contexto do gerenciamento de eventos acadêmicos.
 
-![Diagrama do Banco de Dados](../assets/sql.png)
+![Diagrama do Banco de Dados](../assets/modelo-relacional.png)
+
+## Diagrama MVC
+
+Esta aplicação tem como objetivo permitir o cadastro de usuários e o gerenciamento de tarefas individuais. Utilizando a arquitetura MVC, o sistema foi desenvolvido com foco na organização do código e separação de responsabilidades entre Modelos, Controladores e, futuramente, Views.
+
+![Diagrama MVC](../assets/diagrama-mvc.jpg)
