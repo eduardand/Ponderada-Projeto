@@ -1,57 +1,45 @@
--- DROP das tabelas (na ordem certa para não violar FK)
-DROP TABLE IF EXISTS Inscricao;
-DROP TABLE IF EXISTS Evento;
-DROP TABLE IF EXISTS Usuario;
+-- init.sql
 
--- Tabela de Usuários
-CREATE TABLE Usuario (
-  id_usuario SERIAL PRIMARY KEY,
-  nome_completo VARCHAR(100) NOT NULL,
-  cpf VARCHAR(11) UNIQUE NOT NULL,
-  email VARCHAR(100) UNIQUE NOT NULL,
-  data_nascimento DATE NOT NULL,
-  senha VARCHAR(255) NOT NULL,
-  genero VARCHAR(20),
-  cidade VARCHAR(50),
-  estado VARCHAR(50)
+-- Criar extensão para suportar UUIDs, se ainda não estiver ativada
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Criar tabela de usuários com UUID como chave primária
+CREATE TABLE IF NOT EXISTS users (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL
 );
 
--- Tabela de Eventos
-CREATE TABLE Evento (
-  id_evento SERIAL PRIMARY KEY,
-  nome VARCHAR(100) NOT NULL,
-  data_inicio DATE NOT NULL,
-  data_fim DATE NOT NULL,
-  local VARCHAR(100) NOT NULL,
-  vagas_totais INTEGER NOT NULL
+-- Inserir 20 usuários com nomes e emails aleatórios
+INSERT INTO users (name, email)
+VALUES 
+  ('Alice Smith', 'alice.smith@example.com'),
+  ('Bob Johnson', 'bob.johnson@example.com'),
+  ('Carol Williams', 'carol.williams@example.com'),
+  ('David Jones', 'david.jones@example.com'),
+  ('Emma Brown', 'emma.brown@example.com'),
+  ('Frank Davis', 'frank.davis@example.com'),
+  ('Grace Wilson', 'grace.wilson@example.com'),
+  ('Henry Moore', 'henry.moore@example.com'),
+  ('Isabella Taylor', 'isabella.taylor@example.com'),
+  ('Jack Lee', 'jack.lee@example.com'),
+  ('Kate Clark', 'kate.clark@example.com'),
+  ('Liam Martinez', 'liam.martinez@example.com'),
+  ('Mia Rodriguez', 'mia.rodriguez@example.com'),
+  ('Noah Garcia', 'noah.garcia@example.com'),
+  ('Olivia Hernandez', 'olivia.hernandez@example.com'),
+  ('Patrick Martinez', 'patrick.martinez@example.com'),
+  ('Quinn Lopez', 'quinn.lopez@example.com'),
+  ('Rose Thompson', 'rose.thompson@example.com'),
+  ('Samuel Perez', 'samuel.perez@example.com'),
+  ('Tara Scott', 'tara.scott@example.com');
+
+  CREATE TABLE tarefas (
+  id SERIAL PRIMARY KEY,
+  nome TEXT NOT NULL,
+  descricao TEXT,
+  status TEXT DEFAULT 'pendente',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de Inscrições
-CREATE TABLE Inscricao (
-  id_inscricao SERIAL PRIMARY KEY,
-  id_usuario INTEGER REFERENCES Usuario(id_usuario),
-  id_evento INTEGER REFERENCES Evento(id_evento),
-  valor_pago DECIMAL(10,2),
-  data_inscricao DATE DEFAULT CURRENT_DATE,
-  status VARCHAR(20) DEFAULT 'pendente'
-);
-
--- Inserindo usuários de exemplo
-INSERT INTO Usuario (nome_completo, cpf, email, data_nascimento, senha, genero, cidade, estado)
-VALUES
-('Ana Maria da Silva', '12345678901', 'ana@example.com', '1990-05-10', 'senha123', 'Feminino', 'São Paulo', 'SP'),
-('João Pedro Souza', '98765432100', 'joao@example.com', '1985-11-22', 'senha456', 'Masculino', 'Rio de Janeiro', 'RJ'),
-('Carla Mendes', '11122233344', 'carla@example.com', '1992-08-30', 'senha789', 'Feminino', 'Belo Horizonte', 'MG');
-
--- Inserindo eventos de exemplo
-INSERT INTO Evento (nome, data_inicio, data_fim, local, vagas_totais)
-VALUES
-('Conferência Tech 2025', '2025-06-15', '2025-06-17', 'Centro de Convenções SP', 100),
-('Workshop de Inovação', '2025-07-10', '2025-07-11', 'Espaço Coworking RJ', 50);
-
--- Inserindo inscrições de exemplo
-INSERT INTO Inscricao (id_usuario, id_evento, valor_pago, status)
-VALUES
-(1, 1, 250.00, 'confirmado'),
-(2, 1, 250.00, 'pendente'),
-(3, 2, 100.00, 'confirmado');
