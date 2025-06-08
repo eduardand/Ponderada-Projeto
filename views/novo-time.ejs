@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Novo Time</title>
+    <link rel="stylesheet" href="/styles/forms.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <script
+      src="https://kit.fontawesome.com/cef1d5a932.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <i class="fas fa-tasks"></i>
+          <h1>Minha gestão de tarefas</h1>
+        </div>
+        <nav class="nav-links">
+          <a href="/kanban" class="nav-link"
+            ><i class="fas fa-columns"></i> Kanban</a
+          >
+          <a href="/tarefa/nova" class="nav-link"
+            ><i class="fas fa-plus"></i> Nova Tarefa</a
+          >
+          <a href="/projeto/novo" class="nav-link"
+            ><i class="fas fa-project-diagram"></i> Novo Projeto</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="form-container">
+        <nav class="breadcrumb">
+          <a href="/kanban"><i class="fas fa-columns"></i> Kanban</a>
+          <span class="separator">/</span>
+          <span class="current">Novo Time</span>
+        </nav>
+
+        <div class="page-header">
+          <h2>Criar Novo Time</h2>
+          <p>Preencha os detalhes do seu novo time</p>
+        </div>
+
+        <form class="team-form" action="/api/time/criar" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name"
+                ><i class="fas fa-users"></i> Nome do Time</label
+              >
+              <input
+                type="text"
+                id="name"
+                name="name_teams"
+                required
+                placeholder="Digite o nome do time"
+              />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="description"
+                ><i class="fas fa-align-left"></i> Descrição</label
+              >
+              <textarea
+                id="description"
+                name="description"
+                placeholder="Descreva o time"
+              ></textarea>
+            </div>
+
+            <div class="form-group full-width">
+              <label for="members"
+                ><i class="fas fa-user-plus"></i> Membros do Time</label
+              >
+              <input
+                type="text"
+                id="members"
+                name="members"
+                placeholder="Digite os IDs dos membros (ex: 1,2,3)"
+              />
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-cancelar"
+              onclick="window.location.href='/kanban'"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn-nv">Criar Time</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

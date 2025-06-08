@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestão de tarefas</title>
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/forms.css" />
+    <script
+      src="https://kit.fontawesome.com/cef1d5a932.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <a href="/kanban" class="nav-link">
+            <i class="fas fa-tasks"></i>
+            <h1>Minha gestão de tarefas</h1>
+          </a>
+        </div>
+        <nav class="nav">
+          <div class="nav-links">
+            <a href="/kanban" class="nav-link">
+              <i class="fas fa-columns"></i>
+              Kanban
+            </a>
+            <a href="/tarefa/nova" class="nav-link">
+              <i class="fa-solid fa-bars-progress"></i>
+              Nova Tarefa
+            </a>
+            <a href="/time/novo" class="nav-link">
+              <i class="fas fa-users-cog"></i>
+              Novo Time
+            </a>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="container">
+        <div class="form-container">
+          <div class="page-header">
+            <div class="breadcrumb">
+              <a href="/kanban"><i class="fas fa-home"></i> Kanban</a>
+              <span class="separator">/</span>
+              <span class="current">Novo projeto</span>
+            </div>
+            <h2><i class="fas fa-plus-circle"></i> Criar novo projeto</h2>
+            <p>Preencha os detalhes da seu projeto</p>
+          </div>
+          <form class="task-form" action="/api/projetos/criar" method="POST">
+            <div class="form-row">
+              <div class="form-group full-width">
+                <label for="task-title">
+                  <i class="fas fa-heading"></i>
+                  Título do projeto
+                </label>
+                <input
+                  type="text"
+                  id="name_projects"
+                  name="name_projects"
+                  required
+                  placeholder="Digite o nome do projeto"
+                />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group full-width">
+                <label for="task-description">
+                  <i class="fas fa-align-left"></i>
+                  Descrição
+                </label>
+                <textarea
+                  id="description_projects"
+                  name="description_projects"
+                  placeholder="Descreva os detalhes do projeto (opcional)"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn-cancelar"
+                onclick="window.location.href='/'"
+              >
+                <i class="fas fa-times"></i>
+                Cancelar
+              </button>
+              <button type="submit" class="btn-nv">
+                <i class="fas fa-save"></i>
+                Criar projeto
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

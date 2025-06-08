@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gerenciador de Tarefas</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+    <script src="https://kit.fontawesome.com/cef1d5a932.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <h1>Minha gestão de tarefas</h1>
+        </div>
+        <nav class="nav">
+          <button onclick="window.location.href='/tarefa/nova'" class="btn-nv">
+            <i class="fas fa-plus-circle"></i> Nova Tarefa
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="container">
+        <div class="kanban-board">
+          <div class="kanban-coluna" data-status="Pendente">
+            <div class="coluna-header">
+              <h3><i class="fas fa-clipboard-list"></i> Pendente</h3>
+              <span class="contador-task" id="count-pendente">
+                <%= tarefas.filter(t => t.status === 'Pendente').length %>
+              </span>
+            </div>
+            <div class="tasks-container" id="pendente-tarefas">
+              <% tarefas.filter(t => t.status === 'Pendente').forEach(tarefa => { %>
+                <div class="task-card">
+                  <h4><%= tarefa.title_tasks %></h4>
+                  <div class="task-actions">
+                    <button onclick="window.location.href='/tarefa/editar/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button onclick="window.location.href='/tarefas/view/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fa-solid fa-magnifying-glass"></i> Visualizar
+                    </button>
+                    <button onclick="window.location.href='tarefas/delete/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fa-solid fa-trash"></i> Deletar
+                    </button>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+
+          <div class="kanban-coluna" data-status="Em andamento">
+            <div class="coluna-header">
+              <h3><i class="fas fa-spinner"></i> Em Progresso</h3>
+              <span class="contador-task">
+                <%= tarefas.filter(t => t.status === 'Em andamento').length %>
+              </span>
+            </div>
+            <div class="tarefa-container" id="emandamento">
+              <% tarefas.filter(t => t.status === 'Em andamento').forEach(tarefa => { %>
+                <div class="task-card">
+                  <h4><%= tarefa.title_tasks %></h4>
+                  <div class="task-actions">
+                    <button onclick="window.location.href='/tarefa/editar/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button onclick="window.location.href='/tarefas/view/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fa-solid fa-magnifying-glass"></i> Visualizar
+                    </button>
+                    <button onclick="window.location.href='tarefas/delete/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fa-solid fa-trash"></i> Deletar
+                    </button>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+
+          <div class="kanban-coluna" data-status="Concluída">
+            <div class="coluna-header">
+              <h3><i class="fas fa-check-circle"></i> Concluído</h3>
+              <span class="contador-task">
+                <%= tarefas.filter(t => t.status === 'Concluída').length %>
+              </span>
+            </div>
+            <div class="tasks-container" id="concluido-tarefas">
+              <% tarefas.filter(t => t.status === 'Concluída').forEach(tarefa => { %>
+                <div class="task-card">
+                  <h4><%= tarefa.title_tasks %></h4>
+                  <div class="task-actions">
+                    <button onclick="window.location.href='/tarefa/editar/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button onclick="window.location.href='/tarefas/view/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fa-solid fa-magnifying-glass"></i> Visualizar
+                    </button>
+                    <button onclick="window.location.href='tarefas/delete/<%= tarefa.id %>'" class="btn-edit">
+                      <i class="fa-solid fa-trash"></i> Deletar
+                    </button>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const contadorPendente = document.getElementById("count-pendente");
+        const contadorEmAndamento = document.querySelector(
+          '.kanban-coluna[data-status="Em andamento"] .contador-task'
+        );
+        const contadorConcluida = document.querySelector(
+          '.kanban-coluna[data-status="Concluída"] .contador-task'
+        );
+
+        contadorPendente.textContent = document.querySelectorAll(
+          "#pendente-tarefas .task-card"
+        ).length;
+        contadorEmAndamento.textContent = document.querySelectorAll(
+          "#emandamento .task-card"
+        ).length;
+        contadorConcluida.textContent = document.querySelectorAll(
+          "#concluido-tarefas .task-card"
+        ).length;
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Nova Tarefa</title>
+    <link rel="stylesheet" href="/styles/forms.css" />
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <script
+      src="https://kit.fontawesome.com/cef1d5a932.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <i class="fas fa-tasks"></i>
+          <h1>Minha gestão de tarefas</h1>
+        </div>
+        <nav class="nav-links">
+          <a href="/kanban" class="nav-link"
+            ><i class="fas fa-columns"></i> Kanban</a
+          >
+          <a href="/time/novo" class="nav-link"
+            ><i class="fas fa-users-cog"></i> Novo time</a
+          >
+          <a href="/projeto/novo" class="nav-link"
+            ><i class="fas fa-project-diagram"></i> Novo Projeto</a
+          >
+        </nav>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="form-container">
+        <nav class="breadcrumb">
+          <a href="/kanban"><i class="fas fa-columns"></i> Kanban</a>
+          <span class="separator">/</span>
+          <span class="current">Nova Tarefa</span>
+        </nav>
+
+        <div class="page-header">
+          <h2>Nova tarefa</h2>
+          <p>Preencha os detalhes da sua tarefa</p>
+        </div>
+
+        <form class="task-form" action="/api/tarefas/criar" method="POST">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="title"
+                ><i class="fas fa-heading"></i> Título da Tarefa</label
+              >
+              <input
+                type="text"
+                id="title"
+                name="title_tasks"
+                required
+                placeholder="Digite o título"
+              />
+            </div>
+
+            <div class="form-group full-width">
+              <label for="description"
+                ><i class="fas fa-align-left"></i> Descrição</label
+              >
+              <textarea
+                id="description"
+                name="description_tasks"
+                placeholder="Descreva a tarefa"
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="status"
+                ><i class="fas fa-tasks"></i> Status Inicial</label
+              >
+              <select id="status" name="status">
+                <option value="">Selecione o status</option>
+                <option value="Pendente">Pendente</option>
+                <option value="Em andamento">Em Andamento</option>
+                <option value="Concluída">Concluída</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="priority"
+                ><i class="fas fa-exclamation"></i> Prioridade</label
+              >
+              <select id="priority" name="priority">
+                <option value="">Selecione a prioridade</option>
+                <option value="Baixa">Baixa</option>
+                <option value="Média">Média</option>
+                <option value="Alta">Alta</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="project"
+                ><i class="fas fa-project-diagram"></i> Projeto</label
+              >
+              <div class="input-with-button">
+                <select id="project" name="project_id">
+                  <option value="">Selecione um projeto</option>
+                  <% projetos.forEach(projeto => { %>
+                  <option value="<%= projeto.id %>">
+                    <%= projeto.name_projects %>
+                  </option>
+                  <% }) %>
+                </select>
+                <button
+                  type="button"
+                  class="btn-icon"
+                  onclick="window.location.href='/projeto/novo'"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="team"
+                ><i class="fas fa-users"></i> Time Responsável</label
+              >
+              <div class="input-with-button">
+                <select id="team" name="team_id">
+                  <option value="">Selecione um time</option>
+                  <% times.forEach(time => { %>
+                  <option value="<%= time.id %>"><%= time.name_teams %></option>
+                  <% }) %>
+                </select>
+                <button
+                  type="button"
+                  class="btn-icon"
+                  onclick="window.location.href='/time/novo'"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn-cancelar"
+              onclick="window.location.href='/kanban'"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn-nv">Criar Tarefa</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

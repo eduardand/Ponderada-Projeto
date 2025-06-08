@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visualizar Tarefa</title>
+    <link rel="stylesheet" href="/styles/styles.css" />
+    <link rel="stylesheet" href="/styles/forms.css" />
+    <script
+      src="https://kit.fontawesome.com/cef1d5a932.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="logo">
+          <i class="fas fa-tasks"></i>
+          <h1>Minha gestão de tarefas</h1>
+        </div>
+        <nav class="nav-links">
+          <a href="/kanban" class="nav-link"
+            ><i class="fas fa-columns"></i> Kanban</a
+          >
+          <a href="/time/novo" class="nav-link"
+            ><i class="fas fa-users-cog"></i> Novo time</a
+          >
+          <a href="/projeto/novo" class="nav-link"
+            ><i class="fas fa-project-diagram"></i> Novo Projeto</a
+          >
+        </nav>
+      </div>
+    </header>
+    <main class="main">
+      <div class="container">
+        <nav class="breadcrumb">
+          <a href="/kanban"><i class="fas fa-columns"></i> Kanban</a>
+          <span class="separator">/</span>
+          <span class="current">Visualizar Tarefa</span>
+        </nav>
+
+        <div class="task-details">
+          <h2><%= tarefa.title_tasks %></h2>
+
+          <div class="task-info">
+            <div class="info-group">
+              <label><i class="fas fa-align-left"></i> Descrição:</label>
+              <p><%= tarefa.description_tasks %></p>
+            </div>
+
+            <div class="info-group">
+              <label><i class="fas fa-flag"></i> Status:</label>
+              <p><%= tarefa.status %></p>
+            </div>
+
+            <div class="info-group">
+              <label><i class="fas fa-exclamation"></i> Prioridade:</label>
+              <p><%= tarefa.priority %></p>
+            </div>
+
+            <% if (tarefa.project_id) { %>
+            <div class="info-group">
+              <label><i class="fas fa-project-diagram"></i> Projeto:</label>
+              <p><%= tarefa.project_name %></p>
+            </div>
+            <% } %> <% if (tarefa.team_id) { %>
+            <div class="info-group">
+              <label><i class="fas fa-users"></i> Time:</label>
+              <p><%= tarefa.team_name %></p>
+            </div>
+            <% } %>
+          </div>
+
+          <div class="button-group">
+            <a href="/kanban" class="btn btn-secondary">
+              <i class="fas fa-arrow-left"></i> Voltar ao Kanban
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

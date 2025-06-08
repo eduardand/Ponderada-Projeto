@@ -1,0 +1,137 @@
+### listar tasks
+GET http://localhost:3000/api/tarefas
+Content-Type: application/json
+
+### criar nova task 
+POST http://localhost:3000/api/tarefas/criar?user_id=11
+Content-Type: application/json
+
+{
+  "title_tasks": "t16",
+  "description_tasks": "Descrição da tarefa",
+  "status": "Pendente",
+  "priority": "Média",
+  "user_id": "11",
+  "team_id": null,
+  "project_id": null,
+  "label_id": null
+}
+
+### editar task
+PUT http://localhost:3000/api/tarefas/edit/18
+Content-Type: application/json
+
+{
+    "title_tasks": "Tarefa Atualizada56",
+    "description_tasks": "Nova descrição",
+    "status": "Em andamento",
+    "priority": "Alta",
+    "team_id": 12,
+    "project_id": 10
+}
+
+### deletar task
+DELETE http://localhost:3000/api/tarefas/delete/18
+
+
+
+### listar usuarios
+GET http://localhost:3000/api/usuarios
+Content-Type: application/json
+
+### criar novo usuário
+POST http://localhost:3000/api/usuarios/criar
+Content-Type: application/json
+
+{
+  "name_users": "Usuario teste10",
+  "email": "teste8@gmail.com",
+  "password": "123456"
+}
+
+### editar usuário
+PUT http://localhost:3000/api/usuarios/edit/10
+Content-Type: application/json
+
+{
+ "name_users": "Usuario atualizado 7",
+  "email": "novoemail7@gmail.com",
+  "password": "123456"
+}
+
+### deletar usuário
+DELETE http://localhost:3000/api/usuarios/delete/10
+
+
+### listar projetos
+GET http://localhost:3000/api/projetos
+Content-Type: application/json
+
+### criar novo projeto
+POST http://localhost:3000/api/projetos/criar
+Content-Type: application/json
+
+{
+  "name_projects": "projeto 11",
+  "description_projects": "descrição do projeto teste4"
+}
+
+### editar projeto
+PUT http://localhost:3000/api/projetos/edit/5
+Content-Type: application/json
+
+{
+  "name_projects": "projeto atualizado4",
+  "description_projects": "descrição do projeto teste atualizado",
+  "color_projects": "123456"
+}
+
+### deletar projeto
+DELETE http://localhost:3000/api/projeto/delete/2
+
+
+
+### listar times
+GET http://localhost:3000/api/time
+Content-Type: application/json
+
+### criar novo time
+POST http://localhost:3000/api/time/criar
+Content-Type: application/json
+
+{
+  "name_teams": "time teste6"
+}
+
+### editar time
+PUT http://localhost:3000/api/time/edit/9
+Content-Type: application/json
+
+{
+  "name_teams": "time atualizado2"
+}
+
+### deletar time
+DELETE http://localhost:3000/api/time/delete/9
+
+
+### Atribuir projeto ao time
+POST http://localhost:3000/api/times-projetos
+Content-Type: application/json
+
+{
+  "time_id": 5,
+  "projeto_id": 2
+}
+
+### Listar projetos do time
+GET http://localhost:3000/api/times-projetos/time/4
+
+### Listar times do projeto
+GET http://localhost:3000/api/times-projetos/projeto/2
+Content-Type: application/json
+
+### Remover projeto do time
+DELETE http://localhost:3000/api/times-projetos/1/1
+
+
