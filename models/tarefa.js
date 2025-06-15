@@ -116,14 +116,6 @@ class TarefaModel {
     return resultado.rows;
   }
 
-  static async update( title_tasks, description_tasks, status, priority,user_id,team_id,project_id ) {
-    const result = await db.query(
-      'UPDATE tasks SET title_tasks = $1, description_tasks = $2, status = $3, priority = $4, user_id = $5, team_id = $6, project_id = $7 WHERE id = $8 RETURNING *',
-      [title_tasks, description_tasks, status, priority,user_id,team_id,project_id, id]
-    );
-    return result.rows[0];
-  }
-
   static async atualizar(id, dados) {
     const client = await pool.connect();
     try {
