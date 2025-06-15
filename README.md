@@ -19,6 +19,11 @@ O projeto é parte de uma atividade universitária e integra **frontend, backend
 ```plaintext
 Ponderada-Projeto/
 │
+├── 📁 assets/
+│   ├── diagrama-mvc.jpg
+│   ├── modelo-fisico-simples.png
+│   └── modelo-relacional.png
+│
 ├── 📁 config/
 │   └── database.js
 │
@@ -30,28 +35,32 @@ Ponderada-Projeto/
 │   ├── TimeProjetoController.js
 │   └── UsuarioController.js
 │
-├── 📁 documentos/
-│   ├── diagrama-mvc.jpg
-│   ├── modelo-fisico-simples.png
-│   └── modelo-relacional.png
-│
 ├── 📁 models/
 │   ├── projetos.js
 │   ├── tarefa.js
 │   ├── times.js
-│   ├── timesProjetos.js
-│   └── usuarios.js
+│   ├── timesprojetos.js
+│   └── usuario.js
 │
 ├── 📁 routes/
 │   ├── authRoutes.js
 │   ├── frontendRoutes.js
 │   ├── projetosRoutes.js
-│   ├── tarefaRoutes.js
-│   ├── timeProjetoRoutes.js
+│   ├── tarefasRoutes.js
+│   ├── timesProjetosRoutes.js
 │   ├── timesRoutes.js
-│   └── usuariosRoutes.js
+│   └── usuarioRoutes.js
+│
+├── 📁 schemas/
+│   ├── projetoSchema.js
+│   ├── tarefaSchema.js
+│   ├── timeProjetoSchema.js
+│   ├── timeSchema.js
+│   └── usuarioSchema.js
 │
 ├── 📁 scripts/
+│   ├── exampleData.sql
+│   ├── loadExampleData.js
 │   ├── init.sql
 │   └── runSQLScript.js
 │
@@ -60,11 +69,11 @@ Ponderada-Projeto/
 │
 ├── 📁 styles/
 │   ├── auth.css
-│   ├── forms.css
+│   ├── form.css
 │   └── styles.css
 │
-├── 📁 tests/
-│   └── test.http
+├── 📁 test/
+│   └── api.test.http
 │
 ├── 📁 views/
 │   ├── 📁 auth/
@@ -78,6 +87,7 @@ Ponderada-Projeto/
 │   └── visualizacao-tarefa.ejs
 │
 ├── .env
+├── .env.example
 ├── .gitignore
 ├── jest.config.js
 ├── package-lock.json

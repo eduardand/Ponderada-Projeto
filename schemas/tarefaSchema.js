@@ -40,6 +40,6 @@ const tarefaSchema = Joi.object({
   label_id: Joi.number().integer().allow(null).messages({
     'number.base': 'O ID da etiqueta deve ser um número.'
   })
-});
+}).unknown(true);
 
 module.exports = tarefaSchema;

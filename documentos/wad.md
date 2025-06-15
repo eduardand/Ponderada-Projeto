@@ -1,3 +1,4 @@
+
 # Web Application Document - Projeto Individual - Módulo 2 - Inteli
 
 #### Autor do projeto
@@ -17,19 +18,34 @@ Eduarda Nunes Dias
 
 O sistema proposto consiste em uma aplicação web para gerenciamento de tarefas, desenvolvida com o objetivo de auxiliar usuários que possuem uma rotina intensa e múltiplas responsabilidades. A plataforma permitirá a criação e organização de tarefas, projetos, equipes, etiquetas e anexos, possibilitando também a categorização das atividades por prioridade e status (como pendente, em andamento e concluída), o que contribui diretamente para uma gestão mais eficiente do tempo e das demandas. A interface será projetada para ser simples, prática e intuitiva, garantindo facilidade de uso.
 
+---
 
+## <a name="c2"></a>2. Visão Geral da Aplicação Web
+
+O projeto Task Manager é uma aplicação full-stack construída com Node.js, Express, EJS e PostgreSQL (hospedado via Supabase). A aplicação adota a arquitetura MVC, realiza validação de dados com Joi e testes com Jest.
+
+**Funcionalidades principais:**
+- Autenticação de usuários
+- CRUD completo de tarefas, times, projetos e usuários
+- Relacionamento N:N entre times e projetos
+- Tarefas com prioridade e status (enums)
+- Integração de etiquetas por tarefa
+- Interface simples com views EJS
+- Testes automatizados com Jest e Supertest
+
+---
 
 ## <a name="c3"></a>3. Projeto da Aplicação Web
 
-### 3.1. Modelagem do banco de dados  
-Modelo relacional
+### 3.1. Modelagem do banco de dados
+
+#### Modelo relacional
 ![Diagrama do Banco de Dados](../assets/modelo-relacional.png)
 
 O modelo relacional é uma forma estruturada de organizar os dados de um banco por meio de tabelas, onde cada tabela representa uma entidade (como usuários, tarefas ou projetos), com colunas que definem os atributos e linhas que representam os registros. As tabelas se conectam por chaves primárias e estrangeiras, o que permite relacionar as informações sem repetir dados. 
 
-
-Modelo Físico
-```SQL
+#### Modelo físico
+```sql
 DO $$ 
 BEGIN 
     IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'task_status') THEN
@@ -112,100 +128,130 @@ CREATE TABLE IF NOT EXISTS tasks (
 O modelo físico é a etapa onde tudo aquilo que foi pensado no modelo lógico vira código e estrutura real dentro do banco de dados. Nele, definimos exatamente como as tabelas vão ser criadas, os tipos de dados de cada coluna, os índices, restrições e como os dados vão ser armazenados. É onde o banco começa a existir de fato, com comandos SQL que criam as tabelas e relações.
 
 
-### 3.1.1 BD e Models 
-No projeto, foram implementados diversos models para gerenciar as diferentes entidades do banco de dados. Cada model é responsável pela lógica de acesso aos dados e as regras de negócio específicas de cada entidade. Os models implementados no meu projeto são: <br>
-**tarefa** -> Responsável pelo gerenciamento das tarefas, ele possui métodos para validar as relações, criar, listar, editar e deletar tarefas.<br>
-**usuario** -> Responsável por gerenciar os usuários do sistema, ele possui métodos para criar, editar, deletar e listar os usuários.<br>
-**projeto** -> Responsável por controlar os projetos, ele possui métodos para listar, editar, atualizar e deletar projetos.<br>
-**time** -> Responsável pela administração dos times, ele possui métodos para listar, criar, atualizar e deletar times.<br>
-**timesprojetos** -> Responsáveis por gerenciar as relações entre times - projetos. Isso é necessário devido a terem uma relação N:N, ou seja, um time pode ter vários projetos e um projeto pode pertencer a vários times.
+#### 3.1.1 BD e Models
 
-### 3.2. Arquitetura 
+No projeto, foram implementados diversos models para gerenciar as diferentes entidades do banco de dados. Cada model é responsável pela lógica de acesso aos dados e as regras de negócio específicas de cada entidade:
+
+- **TarefaModel**: gerenciamento de tarefas com validação, criação, edição, exclusão.
+- **UsuarioModel**: controle de usuários, criação e autenticação.
+- **ProjetoModel**: manipulação de projetos e suas atualizações.
+- **TimeModel**: controle e gerenciamento de equipes.
+- **TimeProjetoModel**: manutenção da tabela N:N entre times e projetos.
+
+---
+
+### 3.2 Arquitetura MVC
+
 ![Diagrama MVC](../assets/diagrama-mvc.jpg)
 
 **Fluxo de Dados:**
 
 1. **Cliente → Controller**
-   - O cliente faz uma requisição HTTP (GET, POST, PUT, DELETE)
-   - A requisição é recebida pelo Controller correspondente (tarefaController, labelController...)
+   - Requisições HTTP são recebidas por controladores (ex.: tarefaController)
 
 2. **Controller → Model**
-   - O Controller processa a requisição
-   - Chama os métodos apropriados do Model para acessar/modificar dados
-   - Exemplo: `tarefaController` chama `TarefaModel.criar()` para uma nova tarefa
+   - O controlador processa a requisição e chama o método apropriado no model
 
 3. **Model → Banco de Dados**
-   - O Model executa operações no banco via pool de conexões
-   - Realiza validações e aplica regras de negócio
-   - Retorna os dados/resultados para o Controller
+   - O model interage com o banco de dados, realizando validações e aplicando regras de negócio
 
-4. **Controller → Cliente**
-   - O Controller formata a resposta (JSON)
-   - Envia o código HTTP apropriado 
-   - Retorna os dados para o cliente
+4. **Model → Controller → Cliente**
+   - O resultado é retornado ao cliente como resposta (JSON ou página renderizada)
 
 **Componentes:**
-- **Model**: Implementa a lógica de negócios e acesso ao banco PostgreSQL
-- **Controller**: Gerencia o fluxo de dados e regras de aplicação
-- **Rotas**: Define os endpoints
-- **Banco de Dados**: Armazena dados em tabelas relacionais
-  
-### 3.6. WebAPI e endpoints (Semana 05)
 
-O projeto possui os seguintes endpoints:
+- **Model**: acesso ao PostgreSQL e regras de negócio
+- **Controller**: coordena lógica entre requisição e resposta
+- **Routes**: define endpoints da API
+- **Views (EJS)**: páginas renderizadas no frontend
+- **Database**: estrutura relacional no Supabase/PostgreSQL
+
+---
+
+### 3.6 WebAPI e Endpoints
 
 #### Tarefas
-* GET → `/api/tarefas` → Lista todas as tarefas
-* POST → `/api/tarefas/criar` → Cria uma nova tarefa
-* PUT → `/api/tarefas/edit/:id` → Atualiza uma tarefa existente
-* DELETE → `/api/tarefas/delete/:id` → Remove uma tarefa 
+- `GET /api/tarefas` – Lista todas as tarefas
+- `POST /api/tarefas/criar` – Cria nova tarefa
+- `PUT /api/tarefas/edit/:id` – Edita tarefa
+- `DELETE /api/tarefas/delete/:id` – Deleta tarefa
 
 #### Etiquetas
-* GET → `/api/label` → Lista todas as etiquetas
-* POST → `/api/label/criar` → Cria uma nova etiqueta
-* PUT → `/api/label/edit/:id` → Atualiza uma etiqueta
-* DELETE → `/api/label/delete/:id` → Remove uma etiqueta
+- `GET /api/label` – Lista etiquetas
+- `POST /api/label/criar` – Cria etiqueta
+- `PUT /api/label/edit/:id` – Edita etiqueta
+- `DELETE /api/label/delete/:id` – Remove etiqueta
 
 #### Relação Tarefas-Etiquetas
-* GET → `/api/tasks-labels/task/:task_id` → Lista etiquetas de uma tarefa
-* GET → `/api/tasks-labels/label/:label_id` → Lista tarefas com uma etiqueta
-* POST → `/api/tasks-labels` → Atribui etiqueta à tarefa
-* DELETE → `/api/tasks-labels/:task_id/:label_id` → Remove etiqueta da tarefa
+- `POST /api/tasks-labels` – Atribui etiqueta à tarefa
+- `DELETE /api/tasks-labels/:task_id/:label_id` – Remove etiqueta de tarefa
 
 #### Times
-* GET → `/api/times` → Lista todos os times
-* POST → `/api/times/criar` → Cria um novo time
-* PUT → `/api/times/edit/:id` → Atualiza um time
-* DELETE → `/api/times/delete/:id` → Remove um time
+- `GET /api/times`
+- `POST /api/times/criar`
+- `PUT /api/times/edit/:id`
+- `DELETE /api/times/delete/:id`
 
 #### Projetos
-* GET → `/api/projetos` → Lista todos os projetos
-* POST → `/api/projetos/criar` → Cria um novo projeto
-* PUT → `/api/projetos/edit/:id` → Atualiza um projeto
-* DELETE → `/api/projetos/delete/:id` → Remove um projeto
+- `GET /api/projetos`
+- `POST /api/projetos/criar`
+- `PUT /api/projetos/edit/:id`
+- `DELETE /api/projetos/delete/:id`
 
 #### Usuários
-* GET → `/api/usuarios` → Lista todos os usuários
-* POST → `/api/usuarios/criar` → Cria um novo usuário
-* PUT → `/api/usuarios/edit/:id` → Atualiza um usuário
-* DELETE → `/api/usuarios/delete/:id` → Remove um usuário
+- `GET /api/usuarios`
+- `POST /api/usuarios/criar`
+- `PUT /api/usuarios/edit/:id`
+- `DELETE /api/usuarios/delete/:id`
 
 #### Relação Times-Projetos
-* GET → `/api/times-projetos/time/:time_id` → Lista projetos de um time
-* GET → `/api/times-projetos/projeto/:projeto_id` → Lista times de um projeto
-* POST → `/api/times-projetos` → Vincula time a projeto
-* DELETE → `/api/times-projetos/:time_id/:projeto_id` → Remove vínculo time-projeto
+- `POST /api/times-projetos`
+- `DELETE /api/times-projetos/:time_id/:projeto_id`
 
-### 3.7 Interface e Navegação (Semana 07)
-Descreva e ilustre aqui o desenvolvimento do frontend do sistema web, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.
+---
 
-## <a name="c3"></a>4. Desenvolvimento da Aplicação Web (Semana 8)
-### 4.1 Demonstração do Sistema Web (Semana 8)
-VIDEO: Insira o link do vídeo demonstrativo nesta seção Descreva e ilustre aqui o desenvolvimento do sistema web completo, explicando brevemente o que foi entregue em termos de código e sistema. Utilize prints de tela para ilustrar.
+### 3.7 Interface e Navegação
 
-### 4.2 Conclusões e Trabalhos Futuros (Semana 8)
-Indique pontos fortes e pontos a melhorar de maneira geral. Relacione também quaisquer outras ideias que você tenha para melhorias futuras.
+A interface do projeto foi construída com EJS, combinando HTML, CSS e lógica embutida para exibir dinamicamente os dados. As principais telas incluem:
 
-## <a name="c3"></a> 5. Referências
-Incluir as principais referências de seu projeto, para que o leitor possa consultar caso ele se interessar em aprofundar.
+- Tela de Login/Cadastro
+- Dashboard com tarefas organizadas
+- Tela de criação e edição de tarefas
+- Interface para gerenciamento de times e projetos
 
+---
+
+## 4. Desenvolvimento da Aplicação Web
+
+### 4.1 Demonstração do Sistema Web
+
+Link do vídeo demonstrativo:  
+📽️ [https://youtu.be/a-4KNlPDoCk](https://youtu.be/a-4KNlPDoCk)
+
+---
+
+### 4.2 Conclusões e Trabalhos Futuros
+
+**Pontos fortes:**
+- Estrutura modular e clara com MVC
+- Integração Supabase + Express
+- Validações com Joi
+- Testes com Jest
+
+**Melhorias futuras:**
+- Cobertura completa de testes automatizados
+- Implementar autenticação JWT
+- Otimizar interface para dispositivos móveis
+- Implementar CI/CD para deploy contínuo
+
+---
+
+## 5. Referências
+
+- Node.js: https://nodejs.org  
+- Express.js: https://expressjs.com  
+- PostgreSQL: https://www.postgresql.org  
+- Supabase: https://supabase.com/docs  
+- Joi: https://joi.dev  
+- Jest: https://jestjs.io  
+- MVC Patterns: https://developer.mozilla.org/en-US/docs/Glossary/MVC  

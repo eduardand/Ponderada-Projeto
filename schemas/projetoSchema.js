@@ -18,6 +18,6 @@ const projetoSchema = Joi.object({
     'string.base': 'A cor deve ser um texto.',
     'string.max': 'A cor pode ter no máximo {#limit} caracteres.'
   })
-});
+}).unknown(true);
 
 module.exports = projetoSchema;

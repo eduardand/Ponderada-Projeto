@@ -8,6 +8,6 @@ const timeSchema = Joi.object({
     'string.max': 'O nome do time deve ter no máximo {#limit} caracteres.',
     'any.required': 'O campo nome do time é obrigatório.'
   })
-});
+}).unknown(true);
 
 module.exports = timeSchema;
