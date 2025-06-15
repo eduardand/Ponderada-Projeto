@@ -20,13 +20,21 @@
     "ejs": "^3.1.10",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
+    "joi": "^17.13.3",
     "pg": "^8.16.0",
     "pg-pool": "^3.10.0",
     "pool": "^0.4.1"
-
   },
-  "description": "",
+  "description": "Este é um sistema web de gerenciamento de tarefas. O projeto faz parte de uma atividade prática da faculdade e integra frontend, backend e banco de dados em uma única aplicação.",
   "devDependencies": {
     "nodemon": "^3.1.10"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eduardand/Ponderada-Projeto.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eduardand/Ponderada-Projeto/issues"
+  },
+  "homepage": "https://github.com/eduardand/Ponderada-Projeto#readme"
 }

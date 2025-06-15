@@ -1,4 +1,5 @@
-const pool = require('../config/database');
+const pool = require("../config/database");
+const timeSchema = require("../schemas/timeSchema");
 
 class TimeModel {
   static async findAll() {
@@ -11,7 +12,7 @@ class TimeModel {
       const result = await client.query(query);
       return result.rows;
     } catch (error) {
-      console.error('Error in findAll:', error);
+      console.error("Error in findAll:", error);
       throw error;
     } finally {
       client.release();
@@ -19,18 +20,22 @@ class TimeModel {
   }
 
   static async criar(data) {
+    const { error } = timeSchema.validate(data);
+    if (error) {
+      throw new Error(error.details[0].message);
+    }
+
     const client = await pool.connect();
     try {
       const { name_teams } = data;
       const query = `
-        INSERT INTO teams (name_teams)
-        VALUES ($1)
-        RETURNING *
-      `;
+      INSERT INTO teams (name_teams)
+      VALUES ($1)
+      RETURNING *`;
       const result = await client.query(query, [name_teams]);
       return result.rows[0];
     } catch (error) {
-      console.error('Error in criar:', error);
+      console.error("Error in criar:", error);
       throw error;
     } finally {
       client.release();
@@ -47,15 +52,12 @@ class TimeModel {
         WHERE id = $2 AND is_deleted = FALSE
         RETURNING *`;
 
-      const valores = [
-        dados.name_teams,
-        id
-      ];
+      const valores = [dados.name_teams, id];
 
       const resultado = await client.query(query, valores);
       return resultado.rows[0];
     } catch (error) {
-      console.error('Error in atualizar:', error);
+      console.error("Error in atualizar:", error);
       throw error;
     } finally {
       client.release();
@@ -69,7 +71,7 @@ class TimeModel {
       const result = await client.query(query, [id]);
       return result.rows[0];
     } catch (error) {
-      console.error('Error in delete:', error);
+      console.error("Error in delete:", error);
       throw error;
     } finally {
       client.release();
@@ -86,7 +88,7 @@ class TimeModel {
       const result = await client.query(query, [id]);
       return result.rows[0];
     } catch (error) {
-      console.error('Error in buscarPorId:', error);
+      console.error("Error in buscarPorId:", error);
       throw error;
     } finally {
       client.release();

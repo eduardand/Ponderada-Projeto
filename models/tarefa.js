@@ -1,4 +1,5 @@
 const pool = require('../config/database');
+const tarefaSchema = require('../schemas/tarefaSchema');
 
 class TarefaModel {
   static async validarRelacoes(usuario_id, time_id, projeto_id, label_id) {
@@ -31,77 +32,71 @@ class TarefaModel {
   }
 
   static async criar(dados) {
-    const client = await pool.connect();
-    try {
-      await client.query('BEGIN');
-      
-      const { 
-        title_tasks, 
-        description_tasks, 
-        status = 'Pendente', 
-        priority = 'Média',
-        user_id,
-        team_id,
-        project_id,
-        label_id
-      } = dados;
-
-
-      const sanitizedTeamId = team_id === '' ? null : team_id;
-      const sanitizedProjectId = project_id === '' ? null : project_id;
-      const sanitizedLabelId = label_id === '' ? null : label_id;
-
-      await this.validarRelacoes(
-        user_id, 
-        sanitizedTeamId, 
-        sanitizedProjectId, 
-        sanitizedLabelId
-      );
-
-      const queryTarefa = `
-        INSERT INTO tasks (
-          title_tasks, 
-          description_tasks, 
-          status, 
-          priority,
-          user_id,
-          team_id,
-          project_id
-        )
-        VALUES ($1, $2, $3, $4, $5, $6, $7)
-        RETURNING *`;
-
-      const valores = [
-        title_tasks, 
-        description_tasks, 
-        status, 
-        priority,
-        user_id,
-        sanitizedTeamId,
-        sanitizedProjectId
-      ];
-
-      const resultadoTarefa = await client.query(queryTarefa, valores);
-      const tarefa = resultadoTarefa.rows[0];
-
-
-      if (sanitizedLabelId) {
-        await client.query(
-          'INSERT INTO task_labels (task_id, label_id) VALUES ($1, $2)',
-          [tarefa.id, sanitizedLabelId]
-        );
-      }
-
-      await client.query('COMMIT');
-      return tarefa;
-
-    } catch (erro) {
-      await client.query('ROLLBACK');
-      throw erro;
-    } finally {
-      client.release();
-    }
+  const { error } = tarefaSchema.validate(dados);
+  if (error) {
+    throw new Error(error.details[0].message);
   }
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    const {
+      title_tasks,
+      description_tasks,
+      status = 'Pendente',
+      priority = 'Média',
+      user_id,
+      team_id,
+      project_id,
+      label_id
+    } = dados;
+
+    const sanitizedTeamId = team_id === '' ? null : team_id;
+    const sanitizedProjectId = project_id === '' ? null : project_id;
+    const sanitizedLabelId = label_id === '' ? null : label_id;
+
+    await this.validarRelacoes(user_id, sanitizedTeamId, sanitizedProjectId, sanitizedLabelId);
+
+    const queryTarefa = `
+      INSERT INTO tasks (
+        title_tasks, description_tasks, status, priority,
+        user_id, team_id, project_id
+      )
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING *`;
+
+    const valores = [
+      title_tasks,
+      description_tasks,
+      status,
+      priority,
+      user_id,
+      sanitizedTeamId,
+      sanitizedProjectId
+    ];
+
+    const resultadoTarefa = await client.query(queryTarefa, valores);
+    const tarefa = resultadoTarefa.rows[0];
+
+    if (sanitizedLabelId) {
+      await client.query(
+        'INSERT INTO task_labels (task_id, label_id) VALUES ($1, $2)',
+        [tarefa.id, sanitizedLabelId]
+      );
+    }
+
+    await client.query('COMMIT');
+    return tarefa;
+
+  } catch (erro) {
+    await client.query('ROLLBACK');
+    throw erro;
+  } finally {
+    client.release();
+  }
+}
+
 
   static async listarTodas() {
     const query = `

@@ -1,4 +1,5 @@
-const pool = require('../config/database');
+const pool = require("../config/database");
+const projetoSchema = require("../schemas/projetoSchema");
 
 class ProjetoModel {
   static async findAll() {
@@ -11,13 +12,21 @@ class ProjetoModel {
   }
 
   static async criar(data) {
+    const { error } = projetoSchema.validate(data);
+    if (error) {
+      throw new Error(error.details[0].message);
+    }
+
     const { name_projects, description_projects } = data;
+
     const query = `
-      INSERT INTO projects (name_projects, description_projects)
-      VALUES ($1, $2)
-      RETURNING *
-    `;
-    const result = await pool.query(query, [name_projects, description_projects]);
+    INSERT INTO projects (name_projects, description_projects)
+    VALUES ($1, $2)
+    RETURNING *`;
+    const result = await pool.query(query, [
+      name_projects,
+      description_projects,
+    ]);
     return result.rows[0];
   }
 
@@ -35,7 +44,7 @@ class ProjetoModel {
       dados.name_projects,
       dados.description_projects,
       dados.color_projects,
-      id
+      id,
     ];
 
     const resultado = await pool.query(query, valores);

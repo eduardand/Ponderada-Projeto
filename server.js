@@ -4,7 +4,6 @@ const cors = require('cors');
 const path = require('path');
 const session = require('express-session');
 
-const TarefaModel = require('./models/tarefa');
 
 const tarefasRoutes = require('./routes/tarefasRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
@@ -30,7 +29,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(session({
-    secret: 'lala@2', 
+    secret: process.env.SESSION_SECRET, 
     resave: false,
     saveUninitialized: false  
   }));

@@ -1,4 +1,5 @@
-const pool = require('../config/database');
+const pool = require("../config/database");
+const timeProjetoSchema = require("../schemas/timeProjetoSchema");
 
 class TimeProjetoModel {
   static async verificarRelacaoExistente(time_id, projeto_id) {
@@ -10,16 +11,27 @@ class TimeProjetoModel {
   }
 
   static async criar(time_id, projeto_id) {
-    const relacaoExiste = await this.verificarRelacaoExistente(time_id, projeto_id);
+    const { error } = timeProjetoSchema.validate({
+      team_id: time_id,
+      project_id: projeto_id,
+    });
+    if (error) {
+      throw new Error(error.details[0].message);
+    }
+
+    const relacaoExiste = await this.verificarRelacaoExistente(
+      time_id,
+      projeto_id
+    );
     if (relacaoExiste) {
-      throw new Error('Este projeto já está atribuído a este time');
+      throw new Error("Este projeto já está atribuído a este time");
     }
 
     const query = `
-      INSERT INTO team_projects (team_id, project_id)
-      VALUES ($1, $2)
-      RETURNING *`;
-    
+    INSERT INTO team_projects (team_id, project_id)
+    VALUES ($1, $2)
+    RETURNING *`;
+
     const result = await pool.query(query, [time_id, projeto_id]);
     return result.rows[0];
   }
@@ -30,7 +42,7 @@ class TimeProjetoModel {
       FROM team_projects tp
       JOIN projects p ON tp.project_id = p.id
       WHERE tp.team_id = $1`;
-    
+
     const result = await pool.query(query, [time_id]);
     return result.rows;
   }
@@ -41,7 +53,7 @@ class TimeProjetoModel {
       FROM team_projects tp
       JOIN teams t ON tp.team_id = t.id
       WHERE tp.project_id = $1`;
-    
+
     const result = await pool.query(query, [projeto_id]);
     return result.rows;
   }
@@ -51,7 +63,7 @@ class TimeProjetoModel {
       DELETE FROM team_projects
       WHERE team_id = $1 AND project_id = $2
       RETURNING *`;
-    
+
     const result = await pool.query(query, [time_id, projeto_id]);
     return result.rows[0];
   }
