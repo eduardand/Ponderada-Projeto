@@ -14,7 +14,6 @@ class AuthController {
     static async cadastrar(req, res) {
         try {
             const { name_users, email, password } = req.body;
-            console.log('Registration attempt:', { email, passwordProvided: !!password });
 
             if (!name_users || !email || !password) {
 
@@ -37,11 +36,6 @@ class AuthController {
             }
 
             const hashedPassword = await bcrypt.hash(String(password), 10);
-            console.log('Password hashed:', {
-                originalLength: password.length,
-                hashedLength: hashedPassword.length
-            });
-            
             await Usuario.create({ name_users, email, password: hashedPassword });
             
             res.redirect('/auth/login');
@@ -57,27 +51,17 @@ class AuthController {
     static async login(req, res) {
         try {
             const { email, password } = req.body;
-            console.log('Login attempt:', { email, passwordProvided: !!password });
 
             const usuario = await Usuario.buscarPorEmail(email);
             if (!usuario) {
-                console.log('No user found with email:', email);
                 return res.render('login', { error: 'Email ou senha incorretos' });
             }
 
-            console.log('Password comparison:', {
-                providedPasswordLength: password?.length,
-                storedHashLength: usuario.password?.length,
-                storedHashStart: usuario.password?.substring(0, 10) + '...'
-            });
-
             if (!password || !usuario.password) {
-                console.log('Missing password or hash');
                 return res.render('login', { error: 'Email ou senha incorretos' });
             }
 
             const senhaValida = await bcrypt.compare(String(password), usuario.password);
-            console.log('Password valid:', senhaValida);
 
             if (!senhaValida) {
                 return res.render('login', { error: 'Email ou senha incorretos' });

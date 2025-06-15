@@ -41,7 +41,6 @@ exports.criarProjeto = async (req, res) => {
 exports.listarProjetos = async (req, res) => {
   try {
     const projetos = await ProjetoModel.findAll();
-    console.log('Projetos encontrados:', projetos);
     return projetos;
   } catch (err) {
     console.error('Erro ao listar projetos:', err);

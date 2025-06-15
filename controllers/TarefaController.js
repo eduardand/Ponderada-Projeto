@@ -6,8 +6,6 @@ const TimeModel = require('../models/times');
 exports.criarTarefa = async (req, res) => {
   try {
 
-    console.log('Dados recebidos para criar tarefa:', req.body);
-    console.log('ID do usuário na sessão:', req.session.userId);
     const dados = {
       ...req.body,
       user_id: req.session.userId 
@@ -18,7 +16,6 @@ exports.criarTarefa = async (req, res) => {
     if (req.xhr || req.headers.accept?.includes('application/json')) {
       return res.status(201).json(tarefa);
     }
-    console.log('Tarefa criada com sucesso:', tarefa);
     res.redirect('/kanban');
   } catch (error) {
     console.error('Erro ao criar tarefa:', error);

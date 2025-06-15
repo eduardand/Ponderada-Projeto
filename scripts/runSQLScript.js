@@ -20,7 +20,6 @@ const runSQLScript = async () => {
 
   try {
     await pool.query(sql);
-    console.log('Script SQL executado com sucesso!');
   } catch (err) {
     console.error('Erro ao executar o script SQL:', err);
   } finally {
